@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('demo:server');
+var http = require('http');
+const os = require('os');
+require('console-color-mr');
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app.callback());
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+ function getIPv4() {
+	//同一接口可能有不止一个IP4v地址，所以用数组存
+	let ipv4s = [];
+	//获取网络接口列表对象
+	let interfaces = os.networkInterfaces();
+	Object.keys(interfaces).forEach(function(key) {
+		interfaces[key].forEach(function(item) {
+			//跳过IPv6 和 '127.0.0.1'
+			if ('IPv4' !== item.family || item.internal !== false) return;
+			ipv4s.push(item.address); //可用的ipv4s加入数组
+			// console.log(key + '--' + item.address);
+		})
+	})
+	return ipv4s[0]; //返回一个可用的即可
+}
+let ipv4 = getIPv4();//局域网IP
+
+server.listen(port,() => {
+	console.log('Listening at ' + 'http://localhost:'.green + port.green + '\n'.green + 'or at ' + 'http://'.green +
+		ipv4.green + ':'.green + port.green)
+});
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
