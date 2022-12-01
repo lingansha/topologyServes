@@ -6,7 +6,10 @@ const User = Model("user", {
     defaultValue:DataTypes.UUIDV4,
     allowNull: false,
   },
-  username: DataTypes.TEXT,
+  username: {
+    type:DataTypes.TEXT,
+    unique: true
+  },
   avatar: DataTypes.TEXT,
   favoriteColor: {
     type: DataTypes.TEXT,

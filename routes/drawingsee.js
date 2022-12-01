@@ -5,22 +5,26 @@ router.get('/drawingsee', function (ctx, next) {
 })
 //获取画布信息接口
 router.get('/drawingsee/detail', async(ctx, next) => {
-  const {drawingId} = ctx.query
-  if(!drawingId){
+  try {
+    const {drawingId} = ctx.query
+    if(!drawingId){
+      ctx.body = {
+        code: 400,
+        msg: '缺少请求参数！',
+      }
+      return;
+    }
+    const drawingResult =  await Drawing.findOne({
+      where: {
+        drawingId
+      }
+    });
     ctx.body = {
-      code: 400,
-      msg: '缺少请求参数！',
+      code: 200,
+      data:JSON.parse(drawingResult.data)
     }
-    return;
-  }
-  const drawingResult =  await Drawing.findOne({
-    where: {
-      drawingId
-    }
-  });
-  ctx.body = {
-    code: 200,
-    data:JSON.parse(drawingResult.data)
+  } catch (e) {
+    ctx.throw(e)
   }
 })
 module.exports = router
