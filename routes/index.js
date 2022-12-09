@@ -10,5 +10,5 @@ router.use( jwt({
   cookie: 'token', // 从 cookie 中获取token
   debug: true // 开启debug可以看到准确的错误信息
 })
-  .unless({ path: [/^\/public/,/^\/api\/users/,/^\/api\/drawingsee/] }))
+  .unless({ path: [/^\/public/,/^\/api\/users/,/^\/api\/drawingsee/,/^\/api\/proxy/] }))
 module.exports = router

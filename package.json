@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "axios": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "debug": "^4.1.1",
     "file": "^0.2.2",

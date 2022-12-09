@@ -11,7 +11,7 @@ const drawing = require('./routes/drawing')
 const drawingsee = require('./routes/drawingsee')
 const component = require('./routes/component')
 const upload = require('./routes/upload')
-
+const proxy = require('./routes/proxy')
 const cors = require('koa2-cors')
 // error handler
 //onerror(app)
@@ -76,6 +76,7 @@ app.use(drawing.routes(), drawing.allowedMethods())
 app.use(drawingsee.routes(), drawingsee.allowedMethods())
 app.use(component.routes(), component.allowedMethods())
 app.use(upload.routes(), upload.allowedMethods())
+app.use(proxy.routes(), proxy.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
