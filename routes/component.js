@@ -72,6 +72,30 @@ router.post('/system/customize_component_menu/create_component', async (ctx) => 
     ctx.throw(e)
   }
 })
+//批量创建组件
+router.post('/system/customize_component_menu/create_component_list', async (ctx) => {
+  try {
+    const {list} = ctx.request.body
+    if (!list) {
+      ctx.body = {
+        code: 400,
+        msg: '缺少请求参数！',
+      }
+      return;
+    }
+    for(let info of list){
+      const {menuId,name,text,width,height,bgimage,data} = info
+      await Component.create({userId:ctx.req.userInfo.userId,menuId,name,text,width,height,bgimage,data});
+    }
+    
+    ctx.body = {
+      code: 200,
+      msg:"创建成功"
+    }
+  } catch (e) {
+    ctx.throw(e)
+  }
+})
 //创建动画
 router.post('/system/customize_component_menu/create_animate', async (ctx) => {
   try {
