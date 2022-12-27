@@ -1,6 +1,7 @@
 const router = require('./index')
 const Drawing = require('../model/drawing.js')
 const Communication = require('../model/communication.js')
+var {drawingImg} = require('../util/uploads')
 router.get('/drawing', function (ctx, next) {
   ctx.body = 'this is a users response!'
 })
@@ -19,9 +20,10 @@ router.post('/drawing/add', async (ctx) => {
   
 })
 //保存画布信息接口
-router.post('/drawing/update', async (ctx, next) => {
+router.post('/drawing/update',drawingImg.single('file'), async (ctx, next) => {
   try {
-    const { drawingId, data } = ctx.request.body
+    console.log(ctx.req.body.data)
+    const { data } = ctx.req.body
     if (!data) {
       ctx.body = {
         code: 400,
@@ -29,15 +31,18 @@ router.post('/drawing/update', async (ctx, next) => {
       }
       return;
     }
+    console.log(JSON.parse(data),'==data==')
+    let obj = JSON.parse(data)
+    const {drawingId} = obj
     const drawingResult = await Drawing.findOne({ where: { drawingId } });
     if (drawingResult) {
-      await Drawing.update({ userId:ctx.req.userInfo.userId, drawingId, data },{
+      await Drawing.update({ userId:ctx.req.userInfo.userId, drawingId, data:obj.data ,thumbnail: process.env.domainName+ '/thumbnail/'+ctx.req.file.filename },{
         where:{
           drawingId
         }
       });
     } else {
-      await Drawing.create({ userId:ctx.req.userInfo.userId, data });
+      await Drawing.create({ userId:ctx.req.userInfo.userId, data:obj.data ,thumbnail: process.env.domainName+ '/thumbnail/'+ctx.req.file.filename });
     }
   } catch (e) {
     ctx.throw(e)

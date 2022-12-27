@@ -10,6 +10,9 @@ const Drawing = Model("Drawing", {
     defaultValue:DataTypes.UUIDV4,
     allowNull: false,
   },
-  data: DataTypes.TEXT
+  data: DataTypes.TEXT,
+  thumbnail: {
+    type:DataTypes.TEXT
+  },
 });
 module.exports = Drawing

@@ -8,7 +8,8 @@ const config = {
     crypto: {
       JOINSTR: 'custom' // md5拼接字符串
     },
-    uploadsUrl:'./public/uploads/'
+    uploadsUrl:'./public/uploads/',//自定义组件图片目录
+    drawingUrl:'./public/thumbnail/'//画布缩略图路径
   }
   
   module.exports = config

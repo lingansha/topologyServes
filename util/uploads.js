@@ -14,8 +14,21 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + '.' + fileFormat[fileFormat.length - 1]);
   },
 });
+var drawingImgstorage = multer.diskStorage({
+  //配置图片上传的目录
+  destination: function (req, file, cb) {
+    cb(null, config.drawingUrl); //注意路径必须存在
+  },
+  //图片上传完成重命名
+  filename: function (req, file, cb) {
+    // 获取后缀名
+    cb(null, file.originalname);
+  },
+});
 //加载配置
 var upload = multer({ storage: storage });
+var drawingImg = multer({ storage: drawingImgstorage });
 module.exports ={
-    upload
+    upload,
+    drawingImg
 }

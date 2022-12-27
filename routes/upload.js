@@ -1,6 +1,6 @@
 
 const router = require('./index')
-var {upload} = require('../util/uploads')
+var {upload,drawingImg} = require('../util/uploads')
 const Uploads = require('../model/uploads.js')
 router.get('/upload', function (ctx, next) {
   ctx.body = 'this is a upload response!'
@@ -15,6 +15,13 @@ router.post('/upload/putfile', upload.single('file'), async (ctx) => {
       filename: '/uploads/'+ctx.req.file.filename,//返回文件名 
       pathname: process.env.domainName+ '/uploads/'+ctx.req.file.filename
     }
+	} 
+})
+//画布缩略图接口
+router.post('/upload/drawingImg', drawingImg.single('file'), async (ctx) => { 
+	ctx.body = { 
+    code:200,
+		msg:'生成缩略图成功'
 	} 
 })
 //获取图片列表分页
