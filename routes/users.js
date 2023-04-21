@@ -18,8 +18,8 @@ router.post('/users/register', async (ctx, next) => {
       }
       return;
     }
-    const userInfo = await Users.findAll({
-      attributes: ['username']
+    const userInfo = await Users.findOne({
+      where: {username}
     });
     console.log(userInfo, '==userInfo==')
     if (userInfo.length) {
